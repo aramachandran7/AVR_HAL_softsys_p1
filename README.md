@@ -6,7 +6,7 @@ It involves building out hardware abstraction drivers for specific microcontroll
 Reference the project proposal in the `reports` directory to learn more about objectives, learning goals, etc. 
 
 ## System Breakdown Diagram 
-[Miro board](/reports/system_miro.png)
+![Miro board](/reports/system_miro.png)
 
 ### todo
 - timer drivers 

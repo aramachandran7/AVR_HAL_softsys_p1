@@ -34,7 +34,7 @@ Resources to be used will be this [datasheet](http://ww1.microchip.com/downloads
 
 In order to get started, let's start with a system level diagram of what needs to happen and the overall function and library / driver dependency tree. 
 
-[System Function & breakdown Miro board](system_miro.png)
+![System Function & breakdown Miro board](system_miro.png)
 
 Reference the [Miro board](https://miro.com/welcomeonboard/FOmUawZ5cbtJwrPwp5qxJsDGcSkuQu6xTjJDfAP5yIE8iY9CYdOoj83QGHYZ06f0) to view the complete system diagram, as it's updated. 
 
