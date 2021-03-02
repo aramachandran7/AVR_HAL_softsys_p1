@@ -8,17 +8,21 @@
 
 
 /*  Defines  */
-// how do they define different modes of timer operation 
 
-#define CTC_MODE 1 
-#define NORMAL_MODE 0 
+// Modes
+// TODO: how shd we define different modes of timer operation 
+#define CTC_MODE (short) 1 
+#define NORMAL_MODE (short) 0 
 
+
+// Constants 
 #define FCLK int32_t 4000000
 
 
 /*  Function declarations  */
 
-void init_timer_0(); 
+void init_timer_0(short output_mode, int16_t frequency_1, int16_t frequency_2); 
+
 void init_timer_1(); 
 
 
