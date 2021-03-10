@@ -15,7 +15,7 @@
 #define NORMAL_MODE (short) 0 
 
 
-// Constants 
+/*  Constants  */
 #define FCLK int32_t 4000000
 
 
