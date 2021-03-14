@@ -1,9 +1,11 @@
 #include "AVR_ADC_driver.h"
-
+/*
+- Is there a chance we could want continuous ADC reads? 
+*/
 
 /*
 This funciton can be called any number of times to init the AVR ADC (and reinit / change settings)
-TODO: add more operating modes? 
+TODO: add more operating modes? What are the other usage cases of the ADC on our car? 
 */
 void init_ADC(int16_t frequency){
     // enable ADC bit 

@@ -22,12 +22,10 @@ Think of the drivers as an internal interface that should hardly ever be exposed
 **questions**
 
 - Class structure with referencable attributes - 
-    - How do we convey that all timers are in use? 
-    - How do we check that even 1 timer is in use? 
+    - How do we convey that a certain timer is in use (with minimal memory usage), so we don't overwrite previous settings? 
         - do we do that with registers? 
-    - What about usage error handling?  
+    - What about usage error handling? If a user desires a frequency that doesn't work with our prescalers how do we indicate that to them?   
 - Consider usage of UART and timer simultaneously, where user inits uart before initing timer 
-- How the hell do we do error handling? Our drivers don't touch that? 
 - do we store feature modes of operation as ints, enums etc? 
     - is there a benefit to one way or another? 
 - how much does our code lock us in right now? How should our general driver structure change in the future? 
