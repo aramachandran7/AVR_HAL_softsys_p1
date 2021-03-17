@@ -24,7 +24,6 @@
 
 
 /*  Constants  */
-#define FCLK int32_t 4000000
 // #define ADC_CLK
 
 /*  Function declarations  */
