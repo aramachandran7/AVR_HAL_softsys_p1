@@ -17,13 +17,23 @@ Reference the project proposal in the `reports` directory to learn more about ob
 
 *questions*
 
-*answers*
+*answers* -->
 
 **session 3**
 
 *questions*
+- high level questions: 
+    - where do we define the state and state update functions so that we can reuse code but also avoid importing library in the driver? It has to be written in and imported from driver right? 
+- types of vars to pass into low level API 
+    - uint8_t vs int8_t vs otherwise? shouldn't matter right?
+- state API `get_state()` return? 
+- check first ISR
+- include ISR in header file? 
+- does `MAX_AVR_TIMERS` need to just be MAX_TIMERS? 
+- worth implementing a reset timer function? 
 
-*answers* -->
+
+*answers*
 
 **session 2**
 
@@ -42,16 +52,32 @@ Reference the project proposal in the `reports` directory to learn more about ob
 - where do we define 
 
 *answers*
-- bitfields could work
+- bitfields could certianly work, its a knowledge barrier for our team
 - for certain cases we call other functions
-- single access point function, all other functions call it 
-- more direcotyr
+- single access point function, all other functions call it for low level API
 - array of pointer to timer structs <-- reduction of code duplication  
 - eliminate in_use 
 - https://stackoverflow.com/questions/14633987/how-can-i-force-a-compile-error-in-c
 - state management API exposed publicly for getting not setting, declared above defined below 
-- 
-- trace data flow with diagram  
+
+
+
+Need to have / work on: 
+- trace data flow with diagram
+- add `ENV_CONSTANTS` to every low level driver 
+- cleaner state management 
+- state definition: 
+    - dump in_use 
+    - add enum 
+    - add interrupt set bit(s)
+- state API 
+    - add state update fn 
+    - add state expose fn
+- write single entry point API 
+- write timer ISR
+
+
+
 
 
 **session 1**
