@@ -11,6 +11,6 @@
 /*  Constants  */
 
 /*  Function declarations  */
-void init_timer(); 
+void init_timer(short timer_num, timer_output_mode mode, uint16_t frequency_1, uint16_t frequency_2); 
 
 #endif

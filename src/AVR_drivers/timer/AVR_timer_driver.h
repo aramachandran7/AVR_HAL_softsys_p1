@@ -11,31 +11,29 @@
 /*  Defines  */
 
 // bits references within timer state
-#define T0_A_BIT 0 
-#define T0_B_BIT 1
-#define T1_A_BIT 2 
-#define T1_B_BIT 3 
+#define TIMER_FLAG_CMP_A 1
+#define TIMER_FLAG_CMP_B 1
 
 #define MAX_AVR_TIMERS 3
 
 // Modes --> move to supporting fast PWM and phase correct PWM modes later on
 
-typedef enum TIMER_OUTPUT_MODE {CTC_MODE, NORMAL_MODE, NONE} TIMER_OUTPUT_MODE; 
+typedef enum timer_output_mode {CTC_MODE, NORMAL_MODE, NONE} timer_output_mode; 
 
 
 
 
 // universal timer state struct 
 typedef struct {
-    TIMER_OUTPUT_MODE timer_mode; 
-    uint8_t timer_flag; 
-} TIMER_STATE_STRUCT; 
+    timer_output_mode timer_mode; 
+    volatile uint8_t timer_flag; 
+} timer_state_struct; 
 
 
 /*  Global Vars  */
 
 // create array of struct pointers to hold universal timer state
-TIMER_STATE_STRUCT * universal_timer_state[MAX_AVR_TIMERS]; // filled with void pointers by defualt 
+timer_state_struct * UNIVERSAL_TIMER_STATE[MAX_AVR_TIMERS]; // filled with void pointers by defualt 
 
 
 /*  Constants  */
@@ -43,24 +41,22 @@ TIMER_STATE_STRUCT * universal_timer_state[MAX_AVR_TIMERS]; // filled with void 
 /*  Function declarations  */
 
 // timer 0 inits
-void init_timer_0_raw(int8_t mode, int8_t prescaler, int8_t interrupt_mask, int8_t period_1, int8_t period_2); 
+void init_timer_raw(short timer_num, uint8_t mode, uint8_t prescaler, uint8_t interrupt_mask, uint16_t period_1, uint16_t period_2); 
 
 // void init_timer_0_processed(); // what's this one? 
 
-void init_timer_0(TIMER_OUTPUT_MODE mode, int16_t frequency_1, int16_t frequency_2); 
+void init_timer(short timer_num, timer_output_mode mode, uint16_t frequency_1, uint16_t frequency_2); 
 
-// timer 1 inits
-void init_timer_1_raw(int8_t mode, int8_t prescaler, int8_t interrupt_mask, int8_t period_1, int8_t period_2); 
-
-// void init_timer_1_processed(); 
-
-void init_timer_1(TIMER_OUTPUT_MODE mode, int16_t frequency_1, int16_t frequency_2); 
 
 // state management
-static void set_state_timer(TIMER_STATE_STRUCT * timer_state, TIMER_OUTPUT_MODE new_mode, uint8_t new_flag); 
+// by not exposing set_state_timer() we prevent libraries / higher level code from changing state
+// void set_state_timer(TIMER_STATE_STRUCT * timer_state, TIMER_OUTPUT_MODE new_mode, uint8_t new_flag); 
 
-TIMER_STATE_STRUCT get_state_timer(TIMER_STATE_STRUCT * timer_state); 
+// timer_state_struct get_state_timer(timer_state_struct * timer_state); 
 
+uint8_t check_bit_and_flip_if_1(timer_state_struct * timer_state, uint8_t bit_to_check); 
+
+timer_output_mode get_mode_timer(timer_state_struct * timer_state); 
 
 
 

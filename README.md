@@ -13,11 +13,11 @@ Reference the project proposal in the `reports` directory to learn more about ob
 **Questions**
 
 
-<!-- **session 4**
+**session 4**
 
 *questions*
-
-*answers* -->
+- timer ISR code could be cleaned up it's soooo nasty
+*answers*
 
 **session 3**
 
@@ -33,7 +33,24 @@ Reference the project proposal in the `reports` directory to learn more about ob
 - worth implementing a reset timer function? 
 
 
+- what about updating state from ISR? 
+
 *answers*
+- probably implement state and state managmenet at a library level 
+    - libraries update and maintain state
+    - State structs can be specific to MCU type 
+- universalize the initialization (of things like timers) with register settings stored in .h files for timer1 vs timer0
+- uint8_t
+- hooks
+- split getstate into 2 operations
+
+*todo*
+- 16 bit support for timer1
+- change state API get and set bit 
+- change to uint8_t where possible
+- set 1 timer from another full vertical prototype
+- telemetry code 
+- change caps enum types
 
 **session 2**
 

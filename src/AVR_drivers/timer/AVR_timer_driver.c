@@ -7,32 +7,48 @@ Code currently only supports CTC and normal mode
 frequency_1 is primary, how do we set freuqency_2 as optional / default? 
 */
 
-
+// generalize to timer1? 
 
 /*
 Raw init fn where user passes in individual register values, from datasheet to init
 */
-void init_timer_0_raw(int8_t mode, int8_t prescaler, int8_t interrupt_mask, int8_t period_1, int8_t period_2){
-    TCCR0A |= mode; // set timer mode of operation
-    TCCR0B = prescaler; // set prescaler 
-    TIMSK0 |= interrupt_mask; // enables timer 0 interrupts
-    OCR0A = period_1; // set period for A
-    OCR0B = period_2; // set period for B
+void init_timer_raw(short timer_num, uint8_t mode, uint8_t prescaler, uint8_t interrupt_mask, uint16_t period_1, uint16_t period_2){
+    switch (timer_num)
+    {
+    case 0:
+        uint8_t period_1_8_bit = (uint8_t) period_1; 
+        uint8_t period_2_8_bit = (uint8_t) period_2; 
+        TCCR0A |= mode; // set timer mode of operation
+        TCCR0B = prescaler; // set prescaler 
+        TIMSK0 |= interrupt_mask; // enables timer 0 interrupts
+        OCR0A = period_1_8_bit; // set period for A, 8 bits
+        OCR0B = period_2_8_bit; // set period for B, 8 bits
+        break;
+    case 1: 
+        TCCR1A |= mode; // set timer mode of operation
+        TCCR1B = prescaler; // set prescaler 
+        TIMSK1 |= interrupt_mask; // enables timer 0 interrupts
+        OCR1A = period_1; // set period for A, 16 bits
+        OCR1B = period_2; // set period for B, 16 bits
+        break;    
+    default:
+        break;
+    }
 
 }
 
 /*
 defualt init timer 0 with as many enums as possible
 */
-void init_timer_0(TIMER_OUTPUT_MODE mode, int16_t frequency_1, int16_t frequency_2){
+void init_timer(short timer_num, timer_output_mode mode, uint16_t frequency_1, uint16_t frequency_2){
     
     int16_t prescaler_val; // helper var
     // vars to pass into raw function TODO: types? 
-    int8_t pass_mode = 0x00; 
-    int8_t prescaler; 
-    int8_t interrupt_mask = 0b000; 
-    int8_t period_1 = 0x00; 
-    int8_t period_2 = 0x00; 
+    uint8_t pass_mode = 0x00; 
+    uint8_t prescaler; 
+    uint8_t interrupt_mask = 0b000; 
+    uint16_t period_1 = 0x00; 
+    uint16_t period_2 = 0x00; 
     
     switch(mode){
         case CTC_MODE: 
@@ -64,15 +80,15 @@ void init_timer_0(TIMER_OUTPUT_MODE mode, int16_t frequency_1, int16_t frequency
     }
 
     interrupt_mask |= _BV(OCIE0A); 
-    period_1 = (int8_t)(FCLK/prescaler_val/frequency_1); 
+    period_1 = (uint16_t)(FCLK/prescaler_val/frequency_1); 
 
     if (frequency_2){
         interrupt_mask |= _BV(OCIE0B); 
-        period_2 = (int8_t)(FCLK/prescaler_val/frequency_1);
+        period_2 = (uint16_t)(FCLK/prescaler_val/frequency_1);
     }
 
-    init_timer_0_raw(pass_mode, prescaler, interrupt_mask, period_1, period_2); 
-    set_state_timer(universal_timer_state[0],CTC_MODE,0x00); 
+    init_timer_0_raw(timer_num, pass_mode, prescaler, interrupt_mask, period_1, period_2); 
+    set_state_timer(UNIVERSAL_TIMER_STATE[0],CTC_MODE,0x00); 
 
 }
 
@@ -80,14 +96,39 @@ void init_timer_0(TIMER_OUTPUT_MODE mode, int16_t frequency_1, int16_t frequency
 /*
 Manipulate and access timer state
 */
-
-static void set_state_timer(TIMER_STATE_STRUCT * timer_state, TIMER_OUTPUT_MODE new_mode, uint8_t new_flag){
+void set_state_timer(timer_state_struct * timer_state, timer_output_mode new_mode, uint8_t new_flag){
     (*timer_state).timer_mode = new_mode; 
     (*timer_state).timer_flag = new_flag; 
 }
 
-TIMER_STATE_STRUCT get_state_timer(TIMER_STATE_STRUCT * timer_state){
+// returns entire state.
+timer_state_struct get_state_timer(timer_state_struct * timer_state){
     return (*timer_state); // TODO: how do we return a copy that can't be edited? 
+}
+
+/*
+Public State API
+FOR INTERRUPT HANDLING in superloop: 
+- allows you to check bit at a certian position within a flag within an AVR timer state struct 
+- if 1, returns 1 and flips bit back to 0. If 0, returns 0. 
+*/
+uint8_t check_bit_and_flip_if_1(timer_state_struct * timer_state, uint8_t bit_to_check){
+    // access bit 
+    if (bit_is_set((*timer_state).timer_flag, bit_to_check)){
+        // flip bit now
+        (*timer_state).timer_flag &= ~_BV(bit_to_check); 
+        return 1; 
+    } else {
+        return 0; 
+    }
+}
+
+/*
+Public State API
+For Checking mode 
+*/
+timer_output_mode get_mode_timer(timer_state_struct * timer_state){
+    return (*timer_state).timer_mode; // TODO: how do we return a copy that can't be edited? 
 }
 
 /*
@@ -95,22 +136,30 @@ Interrupt handlers to flip global bits
 */
 ISR(TIMER0_COMPA_vect){
     // flip state bit 
-    TIMER_STATE_STRUCT current_state = get_state_timer(universal_timer_state[0]); 
-    uint8_t new_flag = current_state.timer_flag |= _BV(T0_A_BIT); 
-    set_state_timer(universal_timer_state[0], current_state.timer_mode, new_flag); 
+    timer_state_struct current_state = get_state_timer(UNIVERSAL_TIMER_STATE[0]); 
+    uint8_t new_flag = current_state.timer_flag |= _BV(TIMER_FLAG_CMP_A); 
+    set_state_timer(UNIVERSAL_TIMER_STATE[0], current_state.timer_mode, new_flag); 
 }
 
 ISR(TIMER0_COMPB_vect){
     // flip global bit
+    timer_state_struct current_state = get_state_timer(UNIVERSAL_TIMER_STATE[0]); 
+    uint8_t new_flag = current_state.timer_flag |= _BV(TIMER_FLAG_CMP_B); 
+    set_state_timer(UNIVERSAL_TIMER_STATE[0], current_state.timer_mode, new_flag); 
 }
 
 ISR(TIMER1_COMPA_vect){
     // flip global bit
+    timer_state_struct current_state = get_state_timer(UNIVERSAL_TIMER_STATE[1]); 
+    uint8_t new_flag = current_state.timer_flag |= _BV(TIMER_FLAG_CMP_A); 
+    set_state_timer(UNIVERSAL_TIMER_STATE[0], current_state.timer_mode, new_flag); 
 }
 
 ISR(TIMER1_COMPB_vect){
     // flip global bit
-
+    timer_state_struct current_state = get_state_timer(UNIVERSAL_TIMER_STATE[1]); 
+    uint8_t new_flag = current_state.timer_flag |= _BV(TIMER_FLAG_CMP_B); 
+    set_state_timer(UNIVERSAL_TIMER_STATE[0], current_state.timer_mode, new_flag); 
 }
 
 // void init_timer_0_processed(){} // what's this one? --> intermediate setting
