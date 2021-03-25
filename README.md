@@ -17,6 +17,8 @@ Reference the project proposal in the `reports` directory to learn more about ob
 
 *questions*
 - timer ISR code could be cleaned up it's soooo nasty
+- buildchain? use avr-gcc to compile deps or just gcc 
+- what about the enviornment var header file? Does each directory have its own, how do the drivers know which Env constants file to pull in? 
 *answers*
 
 **session 3**

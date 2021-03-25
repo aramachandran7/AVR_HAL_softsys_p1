@@ -54,7 +54,8 @@ void init_timer(short timer_num, timer_output_mode mode, uint16_t frequency_1, u
 
 // timer_state_struct get_state_timer(timer_state_struct * timer_state); 
 
-uint8_t check_bit_and_flip_if_1(timer_state_struct * timer_state, uint8_t bit_to_check); 
+// uint8_t check_bit_and_flip_if_1(timer_state_struct * timer_state, uint8_t bit_to_check); 
+uint8_t check_bit_and_flip_if_1(short timer_num, uint8_t bit_to_check); 
 
 timer_output_mode get_mode_timer(timer_state_struct * timer_state); 
 

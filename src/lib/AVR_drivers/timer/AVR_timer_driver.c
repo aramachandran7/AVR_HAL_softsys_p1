@@ -112,8 +112,10 @@ FOR INTERRUPT HANDLING in superloop:
 - allows you to check bit at a certian position within a flag within an AVR timer state struct 
 - if 1, returns 1 and flips bit back to 0. If 0, returns 0. 
 */
-uint8_t check_bit_and_flip_if_1(timer_state_struct * timer_state, uint8_t bit_to_check){
+uint8_t check_bit_and_flip_if_1(short timer_num, uint8_t bit_to_check){
     // access bit 
+    timer_state_struct * timer_state = UNIVERSAL_TIMER_STATE[timer_num]; 
+    
     if (bit_is_set((*timer_state).timer_flag, bit_to_check)){
         // flip bit now
         (*timer_state).timer_flag &= ~_BV(bit_to_check); 
