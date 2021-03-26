@@ -1,4 +1,3 @@
-
 FILENAME = ./examples/timer_sample
 DEVICE = atmega16m1
 CLOCK = 4000000UL
@@ -13,10 +12,11 @@ TIMER_DR = ./lib/AVR_drivers/timer/AVR_timer_driver
 ENV_CONST = ./lib/ENV_CONSTANTS.h
 
 timer_driver.o: $(TIMER_DR).c $(TIMER_DR).h $(ENV_CONST)
-	$(COMPILE) -c $(TIMER_DR).c $(ENV_CONST) -o $(TIMER_DR).o
-	
+	ls ./lib
+	$(COMPILE) -c $(TIMER_DR).c -o $(TIMER_DR).o
+
 timer_library.o: $(TIMER_LIB).c $(TIMER_LIB).h $(ENV_CONST)
-	$(COMPILE) -c $(TIMER_LIB).c $(ENV_CONST) -o $(TIMER_DR).o
+	$(COMPILE) -c $(TIMER_LIB).c -o $(TIMER_DR).o
 
 
 compile: timer_library.o timer_driver.o
@@ -30,11 +30,7 @@ upload:
 	avrdude -v -p $(DEVICE) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD) -U flash:w:$(FILENAME).hex:i
 
 clean: 
-	rm $(TIMER_DR).o
-	rm $(TIMER_LIB).o
-	rm $(FILENAME).o 
-	rm $(FILENAME).elf
-	rm $(FILENAME).hex 
+	rm *.o *.hex *.a *.elf
 
 
 # help:

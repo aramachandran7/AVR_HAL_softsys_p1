@@ -7,10 +7,10 @@ to be imported by the every example file and used
 */
 
 /*  Defines  */
-#define FCLK int32_t 4000000
+#define FCLK 4000000
 
-typedef enum mcu_type { STM, AVR, SOFTWARE } mcu_type; 
+typedef enum mcu_type { STM, ATMEGA16M1, SOFTWARE } mcu_type; 
 
-mcu_type MCU = AVR; 
+mcu_type MCU = ATMEGA16M1; 
 
 #endif

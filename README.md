@@ -17,9 +17,30 @@ Reference the project proposal in the `reports` directory to learn more about ob
 
 *questions*
 - timer ISR code could be cleaned up it's soooo nasty
-- buildchain? use avr-gcc to compile deps or just gcc 
+- smartest way to implement runtime error handling (error bit / interrupt of different peripherals)? 
+    - implement error display / LED flash library? 
+    - check for error diagnosis bit (or dedicated byte) within state? 
+- buildchain questions? 
+    - use avr-gcc to compile deps or just gcc 
+    - header file deps? 
+    - why doens't `make` straight work? 
 - what about the enviornment var header file? Does each directory have its own, how do the drivers know which Env constants file to pull in? 
+- toolchain switching for STM32?? 
+- UART driver + lib 
+    - clear data in registers for UART? 
+- env constants file 
+- line 11-14 of timer_library.c
+
 *answers*
+- use relative paths 
+
+
+*todo*
+- timer reset 
+- uart driver + lib + data handling 
+- so much debugging holy shit
+- update relative paths for header files
+
 
 **session 3**
 
