@@ -12,25 +12,26 @@ TIMER_DR = ./lib/AVR_drivers/timer/AVR_timer_driver
 ENV_CONST = ./lib/ENV_CONSTANTS.h
 
 timer_driver.o: $(TIMER_DR).c $(TIMER_DR).h $(ENV_CONST)
-	ls ./lib
 	$(COMPILE) -c $(TIMER_DR).c -o $(TIMER_DR).o
 
 timer_library.o: $(TIMER_LIB).c $(TIMER_LIB).h $(ENV_CONST)
-	$(COMPILE) -c $(TIMER_LIB).c -o $(TIMER_DR).o
+	$(COMPILE) -c $(TIMER_LIB).c -o $(TIMER_LIB).o
 
 
-compile: timer_library.o timer_driver.o
+$(FILENAME).o: $(FILENAME).c # $(FILENAME).h
 	$(COMPILE) -c $(FILENAME).c -o $(FILENAME).o 
-	$(COMPILE) -o $(FILENAME).elf $(FILENAME).o
+
+compile: $(FILENAME).o timer_library.o timer_driver.o
+	$(COMPILE) -o $(FILENAME).elf $(FILENAME).o $(TIMER_DR).o $(TIMER_LIB).o 
 	avr-objcopy -j .text -j .data -O ihex $(FILENAME).elf $(FILENAME).hex
-	avr-size --format=avr --muc=$(DEVICE) $(FILENAME).elf
+	avr-size --format=avr --mcu=$(DEVICE) $(FILENAME).elf
 
 
 upload:
 	avrdude -v -p $(DEVICE) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD) -U flash:w:$(FILENAME).hex:i
 
 clean: 
-	rm *.o *.hex *.a *.elf
+	rm -rf *.o *.hex *.a *.elf
 
 
 # help:

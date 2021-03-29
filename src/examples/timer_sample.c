@@ -19,6 +19,9 @@ Demonstrates Timer veritcal
 // #include "can_api.h"
 // #include "spi.h"
 
+// CONFIG
+mcu_type MCU = ATMEGA16M1; 
+
 
 /*----- Macro Definitions -----*/
 /*----- Global Variables -----*/

@@ -7,10 +7,14 @@ to be imported by the every example file and used
 */
 
 /*  Defines  */
-#define FCLK 4000000
+#define FCLK (uint32_t) 4000000
 
 typedef enum mcu_type { STM, ATMEGA16M1, SOFTWARE } mcu_type; 
 
-mcu_type MCU = ATMEGA16M1; 
+/*  THESE MUST BE SET IN MAIN FIRMWARE FILE  */
+
+extern mcu_type MCU; 
+
+uint16_t UART_BUFFER_SIZE; 
 
 #endif

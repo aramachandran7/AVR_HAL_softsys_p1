@@ -17,9 +17,9 @@ void init_timer(short timer_num, timer_output_mode mode, uint16_t frequency_1, u
             if (current_mode != NONE) {
                 // begin by resetting the timer and then init, or #error timer already in use
                 reset_timer(timer_num); 
-                init_timer(timer_num, mode, frequency_1, frequency_2); 
+                init_timer_driver(timer_num, mode, frequency_1, frequency_2); 
             } else {
-                init_timer(timer_num, mode, frequency_1, frequency_2); 
+                init_timer_driver(timer_num, mode, frequency_1, frequency_2); 
             }
         }
 

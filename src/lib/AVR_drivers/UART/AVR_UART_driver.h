@@ -22,6 +22,9 @@ Baked in assumptions -
 #define UART_RX_RCVD 0 
 #define UART_TX_SENT 1 
 
+#define UART_RX_MODE 2
+#define UART_TX_MODE 3 // how to check mode 
+
 #define MAX_AVR_UARTS 1
 
 
@@ -36,6 +39,10 @@ typedef struct {
     UART_mode mode; 
     UART_conf conf; 
     volatile uint8_t UART_flag; 
+    volatile uint8_t data_buffer[UART_BUFFER_SIZE]; 
+    volatile uint8_t data_byte_rcvd;
+    volatile uint8_t data_byte_send; 
+    // volatile uint8_t queue[UART_BUFFER_SIZE]; 
 } UART_state_struct; 
 
 /*  Global Vars  */

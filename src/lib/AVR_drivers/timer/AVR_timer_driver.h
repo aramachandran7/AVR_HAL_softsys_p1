@@ -47,7 +47,7 @@ void reset_timer(short timer_num);
 // timer inits
 void init_timer_raw(short timer_num, uint8_t mode, uint8_t prescaler, uint8_t interrupt_mask, uint16_t period_1, uint16_t period_2); 
 
-void init_timer(short timer_num, timer_output_mode mode, uint16_t frequency_1, uint16_t frequency_2); 
+void init_timer_driver(short timer_num, timer_output_mode mode, uint16_t frequency_1, uint16_t frequency_2); 
 
 
 // state management

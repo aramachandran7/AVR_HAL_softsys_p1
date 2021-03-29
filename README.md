@@ -5,13 +5,38 @@ It involves building out hardware abstraction drivers for specific microcontroll
 
 Reference the project proposal in the `reports` directory to learn more about objectives, learning goals, etc. 
 
+
 ## System Breakdown Diagram 
 ![Miro board](/reports/system_miro.png)
+
+### Future considerations 
+- build system - `Make` is not sustainable
+- better import statements / env_constants file
+- precprocessor directive include statements + support for STM 
+- interface / playing nicely between this and new CAN library?
+
 
 ### Questions & thoughts
 
 **Questions**
 
+**session 5**
+
+*questions*
+- UART data API design 
+    - how do we use it for sending data on telemetry? 
+    - how do we use it for sending text back to terminal? 
+        - do we write a library for this? 
+    - what belongs to state?  
+        - seperate data-in and data-out flag?
+        - 
+    - 
+- 
+
+*answers*
+
+*todo*
+- building + flashing test
 
 **session 4**
 

@@ -78,8 +78,8 @@ int8_t get_byte(){
 } 
 
 void set_byte(int8_t data) {
-    LINDAT &= 0xff; 
-    LINDAt |= data; 
+    // LINDAT &= 0xff; 
+    LINDAT = data; 
 }
 
 // state update functions
@@ -90,5 +90,5 @@ void set_byte(int8_t data) {
 
 // ISR handling
 ISR(LIN_TC_VECT){ // should this be USART_RX_VECT ? 
-    handle_UART_interrupt(); 
+    
 }
