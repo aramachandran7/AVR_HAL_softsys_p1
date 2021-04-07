@@ -4,22 +4,19 @@
 /*
 platform agnostic code 
 */
-
+#include "../../AVR_drivers/UART/AVR_UART_driver.h"
 #include "../examples/ENV_CONSTANTS.h"
 // need custom preprocessor includes
 
 /*  Defines  */
-extern int8_t UART_TRANSMIT_DATA_BUFFER[256]; // define a buffer that will act  
-
-
-// need to grab and check state from appropriate chip driver
-
 
 
 /*  Constants  */
 
 /*  Function declarations  */
-void init_UART(); // init UART
-void send_UART(); // send singular byte of data 
-void serialize_UART_send(); 
+void init_UART(UART_mode mode, UART_conf conf, uint32_t UART_baud, uint8_t UART_num); 
+
+void recv_UART_to_buffer(uint8_t UART_num); 
+void send_UART_from_buffer(uint8_t UART_num); 
+void send_blocking_UART(); 
 #endif

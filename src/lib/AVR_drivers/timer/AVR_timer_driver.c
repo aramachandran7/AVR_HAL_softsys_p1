@@ -105,7 +105,7 @@ void init_timer_driver(short timer_num, timer_output_mode mode, uint16_t frequen
                 break; 
             case NORMAL_MODE: 
                 pass_mode = 0x00; 
-                interrupt_mask |= _BV(OCIE1A); 
+                interrupt_mask |= _BV(OCIE0A); 
                 break; // reset
             default: 
                 // Don't do anything
@@ -177,7 +177,7 @@ FOR INTERRUPT HANDLING in superloop:
 - allows you to check bit at a certian position within a flag within an AVR timer state struct 
 - if 1, returns 1 and flips bit back to 0. If 0, returns 0. 
 */
-uint8_t check_bit_and_flip_if_1(short timer_num, uint8_t bit_to_check){
+uint8_t check_bit_and_clear_if_set(short timer_num, uint8_t bit_to_check){
     // access bit 
     timer_state_struct * timer_state = UNIVERSAL_TIMER_STATE[timer_num]; 
     

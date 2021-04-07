@@ -1,27 +1,37 @@
 #include "AVR_UART_driver.h"
 
-
-
 /*
 initializes UART
 */
 
-void init_UART_raw(uint8_t control_mode, uint8_t interrupt_setting, int32_t UART_baud){
-    
-    // enable LIN and UART, then enable UART, respectively
+void init_UART_raw(uint8_t control_mode, uint8_t interrupt_setting, uint8_t baud_register){
+    // set registers
     LINCR |= control_mode; 
     LINENIR |= interrupt_setting; 
-
-    // setup baudrate pg 183
-    // LDIV[11..0] = (FCLK / LBT[5..0] * UART_baud)-1; // setup baud rate, pg 183 - is this access of bits within register ok? 
-    LINBRR = 0x0C; 
-
-    
+    LINBRR |= baud_register; 
 }
 
-void init_UART(UART_mode mode, UART_conf conf){
+/*
+Manipulate and access timer state
+*/
+void init_state_UART(UART_state_struct * UART_state, UART_mode new_mode, UART_conf new_conf, uint8_t new_flag){
+    // INIT STATE VARS
+    (*UART_state).mode = new_mode; 
+    (*UART_state).conf = new_conf;
+    (*UART_state).flag = new_flag;
+    // INIT RELEVANT GLOBALS
+    data_TX_buffer = {0};
+    data_RX_buffer = {0};
+    TX_pointer = 0;
+    RX_pointer = 0;
+}
+
+
+void init_UART_driver(UART_mode mode, UART_conf conf, uint32_t UART_baud){
+
     uint8_t control_mode = 0x00; // mode register, passed into LINCR
     uint8_t interrupt_setting = 0x00; // for linenir
+    uint8_t buad_rate_register = 0x00; 
 
 
 
@@ -63,32 +73,69 @@ void init_UART(UART_mode mode, UART_conf conf){
         break;
     }
 
+    buad_rate_register = (uint8_t) (FCLK / (UART_baud * 32) - 1 ); // assumes default value of 32 for LINBTR register | page 183 & 195
 
-    init_UART_raw(control_mode, interrupt_setting); 
 
+    init_state_UART(UNIVERSAL_UART_STATE[1], mode, conf, 0x00); 
+    init_UART_raw(control_mode, interrupt_setting, buad_rate_register); 
 
 }
 
 
-// clear data! 
-int8_t get_byte(){
+/* 
+Low Level API
+*/
+uint8_t get_byte_UART_driver(){
     int8_t data = LINDAT;  
-    LINDAT &= 0xff; 
+    LINDAT &= 0xff; // clear data!  
     return data; 
 } 
 
-void set_byte(int8_t data) {
+void set_byte_UART_driver(uint8_t data) {
     // LINDAT &= 0xff; 
     LINDAT = data; 
 }
 
-// state update functions
+// BLOCKING - loops till ready to send
+void wait_till_UART_ready_to_send(){
+    loop_until_bit_is_clear(LINSIR, LBUSY);
+}
+
+// private state API
+void set_flag(UART_state_struct * state, uint8_t bit_to_check){
+    (*state).flag |= _BV(bit_to_check); 
+}
+void clear_flag(UART_state_struct * state, uint8_t bit_to_check){
+    (*state).flag &= ~_BV(bit_to_check); 
+}
 
 
+
+// Fuck this convoluted public state API jesus
+// tho I like the premise 
+uint8_t check_bit_and_clear_if_set_UART(uint8_t bit_to_check){
+    UART_state_struct * UART_state = UNIVERSAL_UART_STATE[0]; // 0 always, but in the future should be variablized
+
+    if(bit_is_set((*UART_state).flag, bit_to_check)){
+        // clear it, return 1
+        clear_flag(UART_state, bit_to_check); 
+        return 1; 
+    } else {
+        return 0; 
+    }
+}
 
 
 
 // ISR handling
-ISR(LIN_TC_VECT){ // should this be USART_RX_VECT ? 
-    
+ISR(LIN_TC_VECT){
+    // state is ideally chip agnostic, even though we're literally duplicating bits argh 
+    if (bit_is_set(LINSIR, LTXOK)){ // TX 
+        set_flag(UNIVERSAL_UART_STATE[0], UART_TX_SENT); 
+        LINSIR &= ~_BV(LTXOK); // clear actual register 
+    } 
+    if (bit_is_set(LINSIR, LTRXOK)){ // RX 
+        set_flag(UNIVERSAL_UART_STATE[0], UART_RX_RCVD); 
+        LINSIR &= ~_BV(LRXOK); // clear register
+    }
 }

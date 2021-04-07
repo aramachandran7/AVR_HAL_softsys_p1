@@ -30,13 +30,23 @@ Reference the project proposal in the `reports` directory to learn more about ob
     - what belongs to state?  
         - seperate data-in and data-out flag?
         - 
-    - 
+
+
+- DATA API DESIGN: 
+    - recognize that a single clean DATA API can be shared between SPI, UART, I2C, even CAN, ADC
+        - is this too much abstraction lol 
+    - we need a good way to create structures / allocate space + data type based on user preference, probably not within the state struct but where?
+    - we use an enum to indicate what type of data 
+        - is it a good idea to exert this level of control over how users interface with data? 
 - 
 
 *answers*
 
 *todo*
 - building + flashing test
+- complete libraries + drivers for ADC 
+- complete libraries + drivers for UART 
+- write basic blinky libs 
 
 **session 4**
 

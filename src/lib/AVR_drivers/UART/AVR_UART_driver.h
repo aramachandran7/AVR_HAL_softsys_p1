@@ -22,8 +22,6 @@ Baked in assumptions -
 #define UART_RX_RCVD 0 
 #define UART_TX_SENT 1 
 
-#define UART_RX_MODE 2
-#define UART_TX_MODE 3 // how to check mode 
 
 #define MAX_AVR_UARTS 1
 
@@ -38,16 +36,22 @@ typedef enum UART_conf {STANDARD_8N1, STANDARD_8E1, STANDARD_8O1, LISTEN_8N1} UA
 typedef struct {
     UART_mode mode; 
     UART_conf conf; 
-    volatile uint8_t UART_flag; 
-    volatile uint8_t data_buffer[UART_BUFFER_SIZE]; 
-    volatile uint8_t data_byte_rcvd;
-    volatile uint8_t data_byte_send; 
+    volatile uint8_t flag; 
     // volatile uint8_t queue[UART_BUFFER_SIZE]; 
 } UART_state_struct; 
 
 /*  Global Vars  */
 UART_state_struct * UNIVERSAL_UART_STATE[MAX_AVR_UARTS]; 
 
+
+// NOTES: ARCHITECTURALLY IT MAKES SENSE TO ENCAPSULATE THESE IN THE STATE STRUCT
+// HOWEVER THE STATE ACCESS API IS KINDA CLUNKY, IT MAKES THE MOST SENSE TO DIRECTLY 
+// INTERACT WITH THESE VARS AS OPPOSED TO THROUGH AN ARR OF PTRS BASED HEAVY API 
+
+volatile uint8_t data_TX_buffer[UART_BUFFER_SIZE]; 
+volatile uint8_t data_RX_buffer[UART_BUFFER_SIZE]; 
+volatile uint8_t TX_pointer;
+volatile uint8_t RX_pointer; 
 /*  Constants  */
 
 
@@ -55,17 +59,16 @@ UART_state_struct * UNIVERSAL_UART_STATE[MAX_AVR_UARTS];
 
 
 // UART inits
-void init_UART_raw(int32_t UART_baud, short recieve, short transmit); 
+void init_UART_raw(uint8_t control_mode, uint8_t interrupt_setting, uint8_t baud_register); 
 
-void init_UART(UART_mode mode); 
+void init_UART_driver(UART_mode mode, UART_conf conf, uint32_t UART_baud); 
 
-// allow for setting and getting of UART byte 
-int8_t get_byte(); // clear after? 
+uint8_t get_byte_UART_driver(); 
+void set_byte_UART_driver(uint8_t data); 
 
-void set_byte(int8_t data); 
+void wait_till_UART_ready_to_send(); 
 
-void handle_UART_interrupt(); 
-
+uint8_t check_bit_and_clear_if_set_UART(uint8_t bit_to_check); 
 
 
 #endif

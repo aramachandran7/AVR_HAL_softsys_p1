@@ -40,7 +40,7 @@ int main(void){
     while (1)
     {
         /* code */
-        if (check_bit_and_flip_if_1(0, TIMER_FLAG_CMP_A)){
+        if (check_bit_and_clear_if_1(0, TIMER_FLAG_CMP_A)){
             // set timer 1
             init_timer(1, CTC_MODE, freq_timer_2, 0); 
             if (freq_timer_2==100){
