@@ -1,31 +1,57 @@
-# AVR Hardware Abstraction Layer for Olin Electric Motorsports
+# AVR Hardware Abstraction Layer for EV firmware
 
-## Team members: Adi Ramachandran | Course Assistant: Manu Patil | Prof: Steve Matsumoto
+### Team members: Adi Ramachandran | Course Assistant: Manu Patil | Prof: Steve Matsumoto
 
-The objective of this project is to build a proof of concept for a hardware abstraction layer interface for our Formula team's firmware. 
+### Background 
 
-To demonstrate the proof of concept, as a lower bound I will be building a simple peice of AVR firmware that uses 2 custom written microcontroller peripheral abstraction libraries from top to bottom. The upper bound / stretch goal will be implementing 3 full AVR peripheral 'vertical stacks', including one communication protocol (UART most likely), and writing sample firmware that successfully implements those peripherals via the vertical stacks.
+The objective of this project is to build a proof of concept for a hardware abstraction layer (HAL) interface for our Formula vehicle's firmware. The [current revision](https://drive.google.com/file/d/1YjOPOfT_ilDgR61rJebSrrztOiRnLg4-/view) of our Formula SAE electric vehicle has over 14 custom-designed printed circuit boards (PCB's), each handling some function of the car's performance. All of these PCB's use the [Atmega16m1](http://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7647-Automotive-Microcontrollers-ATmega16M1-32M1-64M1-32C1-64C1_datasheet.pdf) microcontroller (MCU), an automotive MCU based on an AVR chip architecture. Each of these PCB's runs chip-specific [firmware](https://github.com/olin-electric-motorsports/mkv-code) with the large amounts of shared register level code. 
+
+The intention of this project is to build out an abstraction layer that virtualizes the low and register level code required to interface with MCU peripherals in a clean and intuitive interface. Beyond just an AVR HAL, we also designed our interface to be chip agnostic, in the case where our team decides to upgrade our selection of MCU to a chip like the STM32. 
+
+
+
+To demonstrate a proof of concept for this system, I built 2 full AVR peripheral 'vertical stacks', for the UART peripheral and the timer peripheral, and wrote 2 simple peices of firmware `timer_sample.c` and `UART_sample.c` to test both 'verticals'. 
 
 For context, a peripheral vertical stack includes a driver layer interface (that is chip architecture specific) along with a library layer interface (that is chip architecture agnostic), all for a single microcontroller peripheral. This could be a timer, an ADC (analog digital converter), the UART interface, LIN interface, etc. 
 
-The end user / firmware writer can simply import the required libraries and a constants file, call the intuitive library layer interace, and all the fine details (like register level programming) is abstracted away. 
+Here's an example of the simplified timer interface. 
+
+```
+|firmware| -->calls--> |timer_library|-->calls-->|timer_driver|
+```
+
+The board level firmware only needs to interact with the timer_library. 
+
+The end user / firmware engineer can simply import the required libraries and a constants file, call and reference the intuitive library layer interace. 
+
+One additional finer detail that is important to the implementation The other primary design decision is the implementation of state structs for each peripheral. There exist 
+
+
 
 My learning goals are to get more comfortable with writing AVR firmware, understand the required use cases of fimrware on our Formula SAE team in order to build a set of intuitive API's that meets their needs, and get comfortable thinking about embedded system library architecture. 
 
-I've worked heavily with Manu, the course teaching assistant, to build this project in a way that will be useful for our Formula team in the long term. Manu is functionally the best resource for this project, and it's been amazing having him effectively oversee project progress. 
+I've consulted heavily with Manu Patil, the course teaching assistant, to build this project in a way that will be useful for our Formula team in the long term. Manu has been an amazing resource over the course of this project. 
 
 
 -- design decision -- 
+
+This entire project revolved around architectural decisions 
 
 -- code snippets -- 
 
 -- project outcome -- 
 
--- next steps -- 
+-- next steps & vision-- 
 
-Parallel development - writing actual firmware using this HAL, and building this HAL out at the same time, is the strongest way to develop the HAL so that it's useful for actual development. 
+The original objective, and what continues to be the long term objective is to build out a general purpose HAL. 
+
+At a high level - 
+- In general, support for alternative chip architectures should be added as needed. 
 
 
+Parallel development - writing actual firmware using this HAL, and building this HAL out at the same time, is the strongest way to develop the HAL so that it's useful & intuitive for actual development. 
+
+- 
 
 
 Target audience: external evaluators / softsys students / students reading formula docs
