@@ -28,7 +28,7 @@ They basically allow for data serialization
 These functions should also work nicely within an indiviudal RTOS thread too!
 */
 
-void recv_UART_to_buffer(uint8_t UART_num){
+void send_UART_from_buffer(uint8_t UART_num){
     // TODO: implement chip checking
     if (check_bit_and_clear_if_set_UART(UART_TX_SENT)){
         // increment TX Buffer and send next byte 
@@ -37,15 +37,30 @@ void recv_UART_to_buffer(uint8_t UART_num){
     }
 }
 
-void send_UART_from_buffer(uint8_t UART_num){
+void send_UART_from_first_byte(uint8_t UART_num){
+    if (check_bit_and_clear_if_set_UART(UART_TX_SENT)){
+        // write to TX buffer from first byte
+        get_byte_UART_driver(data_TX_buffer[0]); 
+    }
+}
+
+
+void recv_UART_to_buffer(uint8_t UART_num){
     // TODO: implement chip checking
     if (check_bit_and_clear_if_set_UART(UART_RX_RCVD)){
-        // increment RX Buffer and write into next byte
-        uint8_t data = get_byte_UART_driver(); 
-        data_RX_buffer[RX_pointer] = data;
+        // increment RX Buffer and write into RX buffer from next byte
+        data_RX_buffer[RX_pointer] = get_byte_UART_driver(); 
         RX_pointer = (RX_pointer + 1) % UART_BUFFER_SIZE; 
     }
 }
+
+void recv_UART_to_first_byte(uint8_t UART_num){
+    if (check_bit_and_clear_if_set_UART(UART_RX_RCVD)){
+        // write into RX buffer from first byte
+        data_RX_buffer[0] = get_byte_UART_driver(); 
+    }
+}
+
 
 // send from the start of buffer, to a certain point, in a blocking manner 
 void send_blocking_UART(uint8_t data_length){

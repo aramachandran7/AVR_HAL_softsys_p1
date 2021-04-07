@@ -21,6 +21,13 @@ I've worked heavily with Manu, the course teaching assistant, to build this proj
 
 -- project outcome -- 
 
+-- next steps -- 
+
+Parallel development - writing actual firmware using this HAL, and building this HAL out at the same time, is the strongest way to develop the HAL so that it's useful for actual development. 
+
+
+
+
 Target audience: external evaluators / softsys students / students reading formula docs
 
 
@@ -30,6 +37,11 @@ Right now I'm working on finalizing the peripheral vertical for just the Atmega 
 
 - [Trello Board](https://trello.com/b/evFEEQDQ/avr-hardware-abstraction-layer)
 - [Github](https://github.com/aramachandran7/AVR_HAL_softsys_p1)
+
+
+
+
+
 
 
 # Proposal 
