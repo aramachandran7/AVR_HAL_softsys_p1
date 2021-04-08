@@ -44,7 +44,7 @@ int main(void){
     {
         /* code */
         send_UART_from_first_byte(0); 
-        if (check_bit_and_clear_if_1(0, TIMER_FLAG_CMP_A)){
+        if (check_bit_and_clear_if_set(0, TIMER_FLAG_CMP_A)){
             increment_var = (increment_var + 1) % 255; 
             data_RX_buffer[0] = increment_var; 
         }
