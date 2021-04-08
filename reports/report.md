@@ -1,4 +1,4 @@
-# AVR Hardware Abstraction Layer for Formula Team vehicle firmware
+# AVR+ Hardware Abstraction Layer for Formula Team vehicle firmware
 
 #### Team members: Adi Ramachandran | Course Assistant: Manu Patil | Prof: Steve Matsumoto
 
@@ -153,6 +153,8 @@ It's all about prioritizing what our Formula team needs.
     - Eliminate all usage of `short` and `int8_t`, and replace with `uint8_t` type, for clarity & memory efficiency
     - Add more clear, concise, less profane comments `//gdi, adi`
     - Consider using bitfields instead of flag bytes for clarity and memory efficiency
+
+**However - Testing on actual hardware is the most immediate TODO!** 
 
 Thanks for reading this the whole way through! You get a cookie! 
 

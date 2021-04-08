@@ -1,5 +1,8 @@
 #include "AVR_ADC_driver.h"
 /*
+---DO NOT USE, NOT COMPILED OR TESTED---
+
+
 - Is there a chance we could want continuous ADC reads? 
 */
 

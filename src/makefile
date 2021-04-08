@@ -59,6 +59,10 @@ upload:
 	avrdude -v -p $(DEVICE) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD) -U flash:w:$(FILENAME).hex:i
 
 
+upload_uart:
+	avrdude -v -p $(DEVICE) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD) -U flash:w:$(FILENAME2).hex:i
+
+
 
 clean: 
 	rm -rf *.o *.hex *.a *.elf

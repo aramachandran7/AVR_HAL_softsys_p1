@@ -8,12 +8,12 @@ Demonstrates and tests UART veritcal
 
 /*----- Includes -----*/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <util/delay.h>
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <string.h>
+// #include <avr/io.h>
+// #include <avr/interrupt.h>
+// #include <util/delay.h>
 
 #include "../lib/libs/timer/timer_library.h"
 #include "../lib/libs/UART/UART_library.h"
