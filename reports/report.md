@@ -32,6 +32,7 @@ I've consulted heavily with Manu Patil, the course teaching assistant, to build 
 
 - For development of the Atmega16m1 drivers, I referenced the [datasheet](http://ww1.microchip.com/downloads/en/DeviceDoc/) heavily
 - For development of the build system to compile and flash the firmware, this was a [great reference](https://gist.github.com/edwardhotchkiss/9378977)
+- For referencing interrupts & interrupt vector names used this [webpage](http://www.nongnu.org/avr-libc/user-manual/group__avr__interrupts.html) 
 
 #### Major Design Decisions & Code
 
@@ -132,9 +133,12 @@ It's all about prioritizing what our Formula team needs.
 - State APIs
     - As mentioned above, the state API will need to be rewritten for each driver (i.e. the STM timer driver will need a state and state API just like the AVR one). 
         - Having a shared state setup between the same peripheral would be nice. 
-    - The state API's in general also share numerous public and private functions like the `check_bit_and_clear_if_set()` function that don't make sense to duplicate between different states. 
+    - The state API's in general also share numerous public and private functions like the `check_bit_and_clear_if_set()` function that don't make sense to duplicate between different states.
+    - This includes finding a home for state-specific data - like the UART `data_TX_buffer`, and ensuring it can be shared by different MCU drivers.  
 - Build chain
     - Upgrade to `Bazel`! `Make` is stopgap and will not work. Not sure about `Make.py`. 
+- Use preprocessor directive include statements in all libraries!
+    - This is huge! We only have to include and compile the drivers we actually need. 
 - Error handling!
     - There needs to be an single library + driver vertical dedicated to error checking and error handling! MCU's expose error registers and checking those registers + visually indicating failures that the hardware automatically detects in the superloop, with a single function call, would be DOPE.
 - RTOS suppport!
@@ -144,8 +148,14 @@ It's all about prioritizing what our Formula team needs.
     - How do we test that a single peripheral works on its own, and works when used with other peripherals? 
     - How do we 'break' the libraries? What are their explicit / implicit vunerabilities?  
     - Are there limitations on performance we should expect if using any one, or multiple verticals? 
+- How does the new CAN library interface with this? 
+- Some minor things 
+    - Eliminate all usage of `short` and `int8_t`, and replace with `uint8_t` type, for clarity & memory efficiency
+    - Add more clear, concise, less profane comments `//gdi, adi`
+    - Consider using bitfields instead of flag bytes for clarity and memory efficiency
 
-Thanks for reading this the whole way through!
+Thanks for reading this the whole way through! You get a cookie! 
+
 #### Links 
 
 - [Trello Board](https://trello.com/b/evFEEQDQ/avr-hardware-abstraction-layer)

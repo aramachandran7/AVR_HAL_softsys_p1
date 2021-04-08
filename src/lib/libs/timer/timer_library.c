@@ -14,7 +14,7 @@ void init_timer(short timer_num, timer_output_mode mode, uint16_t frequency_1, u
         } else {
             // proceed with init, catch errors
             timer_output_mode current_mode = get_mode_timer(UNIVERSAL_TIMER_STATE[timer_num]); 
-            if (current_mode != NONE) {
+            if (current_mode != NO_TIMER) {
                 // begin by resetting the timer and then init, or #error timer already in use
                 reset_timer(timer_num); 
                 init_timer_driver(timer_num, mode, frequency_1, frequency_2); 

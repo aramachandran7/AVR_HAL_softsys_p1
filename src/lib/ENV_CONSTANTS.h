@@ -8,6 +8,7 @@ to be imported by the every example file and used
 
 /*  Defines  */
 #define FCLK (uint32_t) 4000000
+#define UART_BUFFER_SIZE (uint16_t) 256
 
 typedef enum mcu_type { STM, ATMEGA16M1, SOFTWARE } mcu_type; 
 
@@ -15,6 +16,5 @@ typedef enum mcu_type { STM, ATMEGA16M1, SOFTWARE } mcu_type;
 
 extern mcu_type MCU; 
 
-uint16_t UART_BUFFER_SIZE; 
 
 #endif

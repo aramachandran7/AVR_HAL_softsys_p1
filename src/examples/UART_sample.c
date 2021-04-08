@@ -15,7 +15,7 @@ Demonstrates and tests UART veritcal
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-// #include "../lib/libs/timer/timer_library.h"
+#include "../lib/libs/timer/timer_library.h"
 #include "../lib/libs/UART/UART_library.h"
 // #include "can_api.h"
 // #include "spi.h"

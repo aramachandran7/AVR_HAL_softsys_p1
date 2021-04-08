@@ -19,7 +19,7 @@
 
 // Modes --> move to supporting fast PWM and phase correct PWM modes later on
 
-typedef enum timer_output_mode {CTC_MODE, NORMAL_MODE, NONE} timer_output_mode; 
+typedef enum timer_output_mode {CTC_MODE, NORMAL_MODE, NO_TIMER} timer_output_mode; 
 
 
 

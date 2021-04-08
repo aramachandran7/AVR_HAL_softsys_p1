@@ -5,7 +5,6 @@
 platform agnostic code 
 */
 #include "../../AVR_drivers/UART/AVR_UART_driver.h"
-#include "../examples/ENV_CONSTANTS.h"
 // need custom preprocessor includes
 
 /*  Defines  */
@@ -22,7 +21,7 @@ void send_UART_from_buffer(uint8_t UART_num);
 void recv_UART_to_first_byte(uint8_t UART_num); 
 void send_UART_from_first_byte(uint8_t UART_num); 
 
-void send_blocking_UART(); 
+void send_blocking_UART(uint8_t data_length); 
 
 void println_UART(char * starting_char, uint8_t data_len); 
 

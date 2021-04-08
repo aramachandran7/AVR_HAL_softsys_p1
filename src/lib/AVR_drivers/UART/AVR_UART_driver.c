@@ -20,8 +20,8 @@ void init_state_UART(UART_state_struct * UART_state, UART_mode new_mode, UART_co
     (*UART_state).conf = new_conf;
     (*UART_state).flag = new_flag;
     // INIT RELEVANT GLOBALS
-    data_TX_buffer = {0};
-    data_RX_buffer = {0};
+    // data_TX_buffer[UART_BUFFER_SIZE] = {0}; // don't think we need to declare? 
+    // data_RX_buffer[UART_BUFFER_SIZE] = {0};
     TX_pointer = 0;
     RX_pointer = 0;
 }
@@ -34,21 +34,27 @@ void init_UART_driver(UART_mode mode, UART_conf conf, uint32_t UART_baud){
     uint8_t buad_rate_register = 0x00; 
 
 
-
     switch (mode)
     {
     case FULL_DUPLEX:
         /* code */
-        control_mode |= _BV(LENA) |= _BV(LCMD2) |= LMCD0 |= LMCD1;  
+        control_mode |= _BV(LENA); 
+        control_mode |= _BV(LCMD0); 
+        control_mode |= _BV(LCMD1);  
+        control_mode |= _BV(LCMD2); 
         interrupt_setting |= _BV(LENTXOK); 
         interrupt_setting |= _BV(LENRXOK); 
         break;
     case RX_ONLY: 
-        control_mode |= _BV(LENA) |= _BV(LCMD2) |= LMCD0;  
+        control_mode |= _BV(LENA); 
+        control_mode |= _BV(LCMD0);  
+        control_mode |= _BV(LCMD2); 
         interrupt_setting |= _BV(LENRXOK); 
         break;
     case TX_ONLY: 
-        control_mode |= _BV(LENA) |= _BV(LCMD2) |= LMCD1;  
+        control_mode |= _BV(LENA); 
+        control_mode |= _BV(LCMD1);  
+        control_mode |= _BV(LCMD2); 
         interrupt_setting |= _BV(LENTXOK); 
         break; 
     default:
@@ -58,7 +64,8 @@ void init_UART_driver(UART_mode mode, UART_conf conf, uint32_t UART_baud){
     switch (conf)
     {
     case STANDARD_8N1:
-        control_mode &= ~_BV(LCONF1) &= ~_BV(LCONF0); // set both to 0
+        control_mode &= ~_BV(LCONF1); 
+        control_mode &= ~_BV(LCONF0); // set both to 0
         break;
     case STANDARD_8E1: 
         control_mode |= _BV(LCONF0); 
@@ -67,7 +74,8 @@ void init_UART_driver(UART_mode mode, UART_conf conf, uint32_t UART_baud){
         control_mode |= _BV(LCONF1); 
         break; 
     case LISTEN_8N1: 
-        control_mode |= _BV(LCONF1) |= _BV(LCONF2); 
+        control_mode |= _BV(LCONF0); 
+        control_mode |= _BV(LCONF1); 
         break; 
     default:
         break;
@@ -76,7 +84,7 @@ void init_UART_driver(UART_mode mode, UART_conf conf, uint32_t UART_baud){
     buad_rate_register = (uint8_t) (FCLK / (UART_baud * 32) - 1 ); // assumes default value of 32 for LINBTR register | page 183 & 195
 
 
-    init_state_UART(UNIVERSAL_UART_STATE[1], mode, conf, 0x00); 
+    init_state_UART(UNIVERSAL_UART_STATE[0], mode, conf, 0x00); 
     init_UART_raw(control_mode, interrupt_setting, buad_rate_register); 
 
 }
@@ -128,13 +136,14 @@ uint8_t check_bit_and_clear_if_set_UART(uint8_t bit_to_check){
 
 
 // ISR handling
-ISR(LIN_TC_VECT){
+
+ISR(LIN_TC_vect){
     // state is ideally chip agnostic, even though we're literally duplicating bits argh 
     if (bit_is_set(LINSIR, LTXOK)){ // TX 
         set_flag(UNIVERSAL_UART_STATE[0], UART_TX_SENT); 
         LINSIR &= ~_BV(LTXOK); // clear actual register 
     } 
-    if (bit_is_set(LINSIR, LTRXOK)){ // RX 
+    if (bit_is_set(LINSIR, LRXOK)){ // RX 
         set_flag(UNIVERSAL_UART_STATE[0], UART_RX_RCVD); 
         LINSIR &= ~_BV(LRXOK); // clear register
     }

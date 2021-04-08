@@ -10,7 +10,7 @@ Baked in assumptions -
 
 
 #include <avr/io.h>
-#include <AVR_drivers/interrupt.h>
+#include <avr/interrupt.h>
 #include <util/delay.h>
 #include <stdlib.h>
 #include <inttypes.h>
@@ -27,7 +27,7 @@ Baked in assumptions -
 
 
 // Modes
-typedef enum UART_mode {RX_ONLY, TX_ONLY, FULL_DUPLEX, NONE} UART_mode; 
+typedef enum UART_mode {RX_ONLY, TX_ONLY, FULL_DUPLEX, NO_UART} UART_mode; 
 
 typedef enum UART_conf {STANDARD_8N1, STANDARD_8E1, STANDARD_8O1, LISTEN_8N1} UART_conf; 
 
