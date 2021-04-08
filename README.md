@@ -1,6 +1,6 @@
-# AVR+ Hardware Abstraction Layer for Formula Team vehicle firmware
+# AVR+ Hardware Abstraction Layer for Formula Vehicle Firmware
 
-An 
+A proof of concept hardware abstraction layer (HAL) interface including a set of chip agnostic libraries & hardware specific drivers, to be used on our Formula SAE electric vehicle. 
 
 ## Installation
 ```
@@ -52,7 +52,7 @@ $ make clean
 ## Full Report 
 *Report from `./reports/report.md`*
 
-### AVR+ Hardware Abstraction Layer for Formula Team vehicle firmware
+# AVR+ Hardware Abstraction Layer for Formula Team vehicle firmware
 
 #### Team members: Adi Ramachandran | Course Assistant: Manu Patil | Prof: Steve Matsumoto
 

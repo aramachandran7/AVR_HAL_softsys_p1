@@ -1,4 +1,4 @@
-# AVR+ Hardware Abstraction Layer for Formula Team vehicle firmware
+# AVR+ Hardware Abstraction Layer for Formula Vehicle Firmware
 
 #### Team members: Adi Ramachandran | Course Assistant: Manu Patil | Prof: Steve Matsumoto
 
