@@ -66,6 +66,9 @@ upload_uart:
 
 clean: 
 	rm -rf *.o *.hex *.a *.elf
+	find . -name \*.o -type f -delete 
+
+# do find for all garbage file types?  
 
 
 # help:
