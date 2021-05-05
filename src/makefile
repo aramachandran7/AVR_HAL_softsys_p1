@@ -1,11 +1,11 @@
 FILENAME = ./examples/timer_sample
 FILENAME2 = ./examples/UART_sample
 
-DEVICE = atmega16m1
+DEVICE = m16
 CLOCK = 4000000UL
 BAUD = 115200
-PROGRAMMER = arduino
-PORT = /dev/cu.usbserial
+PROGRAMMER = usbasp # might be 'dragon_isp' or `avrispmkII`
+PORT = usb
 
 COMPILE = avr-gcc -Wall -Werror -Os -g -std=gnu99 -DF_CPU=$(CLOCK) -mmcu=$(DEVICE) # -lm
 
@@ -16,6 +16,9 @@ UART_LIB = ./lib/libs/UART/UART_library
 UART_DR = ./lib/AVR_drivers/UART/AVR_UART_driver
 
 ENV_CONST = ./lib/ENV_CONSTANTS.h
+
+# for flashing: 
+AVRFLAGS = -B5 -v -c $(PROGRAMMER) -p $(DEVICE) -P $(PORT)
 
 
 timer_driver.o: $(TIMER_DR).c $(TIMER_DR).h $(ENV_CONST)
@@ -56,7 +59,9 @@ compile_uart: $(FILENAME2).o timer_library.o timer_driver.o UART_library.o UART_
 
 
 upload:
-	avrdude -v -p $(DEVICE) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD) -U flash:w:$(FILENAME).hex:i
+	sudo avrdude $(AVRFLAGS) -U flash:w:$(FILENAME).hex 
+
+#:i
 
 
 upload_uart:

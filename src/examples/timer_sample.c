@@ -25,7 +25,7 @@ mcu_type MCU = ATMEGA16M1;
 
 /*----- Macro Definitions -----*/
 /*----- Global Variables -----*/
-uint16_t freq_timer_1 = 100; 
+uint16_t freq_timer_1 = 30; 
 uint16_t freq_timer_2 = 1000; 
 
 /*----- Interrupt(s) -----*/
@@ -36,18 +36,27 @@ uint16_t freq_timer_2 = 1000;
 int main(void){
     /*----- INITS -----*/
     init_timer(0, CTC_MODE, freq_timer_1, 0); 
+
+
+    DDRD |= _BV(DDD7); // toggle mode to output 
+    PORTD |= _BV(PD7); // set to logic HIGH
     
     while (1)
     {
         /* code */
         if (check_bit_and_clear_if_set(0, TIMER_FLAG_CMP_A)){
-            // set timer 1
-            init_timer(1, CTC_MODE, freq_timer_2, 0); 
-            if (freq_timer_2==100){
-                freq_timer_2 = 1000; 
-            } else {
-                freq_timer_2 -= 100; 
-            }
+            
+            // flash LED 
+            PORTD ^= _BV(PD7); 
+
+            
+            // // set timer 1
+            // init_timer(1, CTC_MODE, freq_timer_2, 0); 
+            // if (freq_timer_2==100){
+            //     freq_timer_2 = 1000; 
+            // } else {
+            //     freq_timer_2 -= 100; 
+            // }
         // if (check_bit_and_flip_if_1(0, TIMER_FLAG_CMP_A)){
         //     // flash LED
         // }
