@@ -28,6 +28,13 @@ mcu_type MCU = ATMEGA16M1;
 
 /*----- MAIN -----*/
 
+
+ISR(TIMER0_COMPA_vect){
+    // flip state bit 
+    test_flag |= _BV(TEST_BIT); 
+
+}
+
 int main(void){
     /*----- INITS -----*/
     // init_timer(0, CTC_MODE, freq_timer_1, 0); 
