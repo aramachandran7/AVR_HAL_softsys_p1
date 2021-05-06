@@ -72,7 +72,7 @@ compile_uart: $(FILENAME2).o timer_library.o timer_driver.o UART_library.o UART_
 upload:
 	sudo avrdude $(AVRFLAGS) -U flash:w:$(FILENAME3).hex 
 
-#:i
+
 
 
 upload_uart:

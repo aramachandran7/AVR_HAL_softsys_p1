@@ -85,7 +85,7 @@ void set_state_timer(timer_state_struct * timer_state, timer_output_mode new_mod
 defualt init timer 0 with as many enums as possible
 */
 void init_timer_driver(short timer_num, timer_output_mode mode, uint16_t frequency_1, uint16_t frequency_2){
-    test_flag = 0x00; 
+     
     uint8_t prescaler_val; // helper var
     // vars to pass into raw function TODO: types? 
     uint8_t pass_mode = 0x00; 
@@ -148,7 +148,7 @@ void init_timer_driver(short timer_num, timer_output_mode mode, uint16_t frequen
         prescaler = 0b000;          // no prescaler
     }
 
-    period_1 = (uint16_t)(FCLK>>prescaler_val/frequency_1); // TODO: confirm ??? 
+    period_1 = (uint16_t)(((uint16_t)(FCLK>>prescaler_val))/frequency_1); // TODO: confirm ??? 
 
     if (frequency_2){
         if (timer_num== 1){
@@ -157,7 +157,8 @@ void init_timer_driver(short timer_num, timer_output_mode mode, uint16_t frequen
         interrupt_mask |= _BV(OCIE1B); 
         period_2 = (uint16_t)(FCLK>>prescaler_val/frequency_1);
     }
-
+    //period_1 = 0xE6; 
+    //prescaler = 0x05; 
     init_timer_raw(timer_num, pass_mode, prescaler, interrupt_mask, period_1, period_2); 
     set_state_timer(UNIVERSAL_TIMER_STATE[0],CTC_MODE,0x00); 
 
