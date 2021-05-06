@@ -155,7 +155,7 @@ void init_timer_driver(short timer_num, timer_output_mode mode, uint16_t frequen
             interrupt_mask |= _BV(OCIE0B); 
         }
         interrupt_mask |= _BV(OCIE1B); 
-        period_2 = (uint16_t)(FCLK>>prescaler_val/frequency_1);
+        period_2 = (uint16_t)(((uint16_t)(FCLK>>prescaler_val))/frequency_2);
     }
     //period_1 = 0xE6; 
     //prescaler = 0x05; 

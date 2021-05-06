@@ -81,8 +81,8 @@ void init_UART_driver(UART_mode mode, UART_conf conf, uint32_t UART_baud){
         break;
     }
 
-    buad_rate_register = (uint8_t) (FCLK / (UART_baud * 32) - 1 ); // assumes default value of 32 for LINBTR register | page 183 & 195
-
+    buad_rate_register = (uint8_t) (FCLK / ((uint32_t)(UART_baud * 32)) - 1 ); // assumes default value of 32 for LINBTR register | page 183 & 195
+    // TODO: THIS LINE IS HIGHLY SUS 
 
     init_state_UART(UNIVERSAL_UART_STATE[0], mode, conf, 0x00); 
     init_UART_raw(control_mode, interrupt_setting, buad_rate_register); 
