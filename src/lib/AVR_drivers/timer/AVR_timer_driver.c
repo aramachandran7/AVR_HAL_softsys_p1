@@ -1,6 +1,8 @@
 #include "AVR_timer_driver.h"
 
 
+#define TEST_BIT 0
+uint8_t test_flag = 0x00; 
 
 /* 
 Page 85-93 of Atmega datasheet 
@@ -203,6 +205,8 @@ Interrupt handlers to flip global bits
 */
 ISR(TIMER0_COMPA_vect){
     // flip state bit 
+    test_flag |= _BV(TEST_BIT); 
+    
     timer_state_struct current_state = get_state_timer(UNIVERSAL_TIMER_STATE[0]); 
     uint8_t new_flag = current_state.timer_flag |= _BV(TIMER_FLAG_CMP_A); 
     set_state_timer(UNIVERSAL_TIMER_STATE[0], current_state.timer_mode, new_flag); 
