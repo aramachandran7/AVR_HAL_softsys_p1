@@ -25,9 +25,9 @@ mcu_type MCU = ATMEGA16M1;
 
 /*----- Macro Definitions -----*/
 /*----- Global Variables -----*/
-uint16_t freq_timer_1 = 30; 
+uint16_t freq_timer_1 = 17; 
 uint16_t freq_timer_2 = 1000; 
-
+uint8_t counter = 0; 
 /*----- Interrupt(s) -----*/
 /*----- Functions -----*/
 
@@ -45,21 +45,22 @@ int main(void){
     {
         /* code */
         if (check_bit_and_clear_if_set(0, TIMER_FLAG_CMP_A)){
-            
-            // flash LED 
+
+            if (counter%3 == 0){
+                // set timer 1
+                init_timer(1, CTC_MODE, freq_timer_2, 0); 
+                if (freq_timer_2==100){
+                    freq_timer_2 = 1000; 
+                } else {
+                    freq_timer_2 -= 100; 
+                }
+            }
+            counter += 1; 
+        }
+        if (check_bit_and_clear_if_set(1, TIMER_FLAG_CMP_A)){
+            // flash LED
             PORTD ^= _BV(PD7); 
 
-            
-            // // set timer 1
-            // init_timer(1, CTC_MODE, freq_timer_2, 0); 
-            // if (freq_timer_2==100){
-            //     freq_timer_2 = 1000; 
-            // } else {
-            //     freq_timer_2 -= 100; 
-            // }
-        // if (check_bit_and_flip_if_1(0, TIMER_FLAG_CMP_A)){
-        //     // flash LED
-        // }
         }
     }
     
