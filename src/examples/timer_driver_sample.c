@@ -64,16 +64,16 @@ int main(void){
        // _delay_ms(500); 
 
         
-        if (bit_is_set(test_flag, TEST_BIT)){
+        //if (bit_is_set(test_flag, TEST_BIT)){
+        //    PORTD ^= _BV(PD7); 
+        //    test_flag &= ~_BV(TEST_BIT); 
+
+        //}
+
+	
+        if (check_bit_and_clear_if_set(0, TIMER_FLAG_CMP_A)){
             PORTD ^= _BV(PD7); 
-            test_flag &= ~_BV(TEST_BIT); 
-
         }
-
-
-        // if (check_bit_and_clear_if_set(0, TIMER_FLAG_CMP_A)){
-        //     PORTD ^= _BV(PD7); 
-        // }
     }
     
 }
