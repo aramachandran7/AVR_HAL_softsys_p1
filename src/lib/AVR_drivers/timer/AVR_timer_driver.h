@@ -15,16 +15,12 @@
 #define TIMER_FLAG_CMP_A 0 
 #define TIMER_FLAG_CMP_B 1
 
-#define MAX_AVR_TIMERS 3
+#define MAX_AVR_TIMERS 2
 
 // Modes --> move to supporting fast PWM and phase correct PWM modes later on
 
 typedef enum timer_output_mode {CTC_MODE, NORMAL_MODE, NO_TIMER} timer_output_mode; 
 
-
-// for testing
-volatile uint8_t test_flag; 
-#define TEST_BIT 0
 
 // universal timer state struct 
 typedef struct {

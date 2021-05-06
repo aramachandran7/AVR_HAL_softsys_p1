@@ -44,9 +44,9 @@ int main(void){
     /*----- INITS -----*/
 
     // reset_timer(0); 
-    // init_timer(0, CTC_MODE, 17, 0); 
-    init_timer_driver(0, CTC_MODE, 17, 0); 
-    test_flag = 0x00; 
+    init_timer(0, CTC_MODE, 17, 0); 
+    // init_timer_driver(0, CTC_MODE, 17, 0); 
+    // test_flag = 0x00; 
     //TCCR0A |= _BV(WGM01);    // Set up 8-bit timer in CTC mod
     //TCCR0B = 0x05;          // clkio/1024 prescaler
     //TIMSK0 |= _BV(OCIE0A); // interrupt? 

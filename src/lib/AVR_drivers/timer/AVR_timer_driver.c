@@ -203,39 +203,30 @@ timer_output_mode get_mode_timer(timer_state_struct * timer_state){
 Interrupt handlers to flip global bits 
 */
 ISR(TIMER0_COMPA_vect){
-    // flip state bit 
-    //test_flag |= _BV(TEST_BIT); 
-
+    // flip global bit 
     timer_state_struct current_state = get_state_timer(UNIVERSAL_TIMER_STATE[0]); 
     uint8_t new_flag = current_state.timer_flag | _BV(TIMER_FLAG_CMP_A); 
     set_state_timer(UNIVERSAL_TIMER_STATE[0], current_state.timer_mode, new_flag); 
 }
 
-// for testing
-//ISR(TIMER0_COMPA_vect){
-    // flip state bit 
-  //  test_flag |= _BV(TEST_BIT);
-    //PORTD ^= _BV(PD7); 
-//}
-
 ISR(TIMER0_COMPB_vect){
     // flip global bit
     timer_state_struct current_state = get_state_timer(UNIVERSAL_TIMER_STATE[0]); 
-    uint8_t new_flag = current_state.timer_flag |= _BV(TIMER_FLAG_CMP_B); 
+    uint8_t new_flag = current_state.timer_flag | _BV(TIMER_FLAG_CMP_B); 
     set_state_timer(UNIVERSAL_TIMER_STATE[0], current_state.timer_mode, new_flag); 
 }
 
 ISR(TIMER1_COMPA_vect){
     // flip global bit
     timer_state_struct current_state = get_state_timer(UNIVERSAL_TIMER_STATE[1]); 
-    uint8_t new_flag = current_state.timer_flag |= _BV(TIMER_FLAG_CMP_A); 
+    uint8_t new_flag = current_state.timer_flag | _BV(TIMER_FLAG_CMP_A); 
     set_state_timer(UNIVERSAL_TIMER_STATE[0], current_state.timer_mode, new_flag); 
 }
 
 ISR(TIMER1_COMPB_vect){
     // flip global bit
     timer_state_struct current_state = get_state_timer(UNIVERSAL_TIMER_STATE[1]); 
-    uint8_t new_flag = current_state.timer_flag |= _BV(TIMER_FLAG_CMP_B); 
+    uint8_t new_flag = current_state.timer_flag | _BV(TIMER_FLAG_CMP_B); 
     set_state_timer(UNIVERSAL_TIMER_STATE[0], current_state.timer_mode, new_flag); 
 }
 
