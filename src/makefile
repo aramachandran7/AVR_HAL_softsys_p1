@@ -1,5 +1,6 @@
 FILENAME = ./examples/timer_sample
 FILENAME2 = ./examples/UART_sample
+FILENAME3 = ./examples/timer_driver_sample
 DEVICE = atmega16m1
 DEVICE2 = m16
 CLOCK = 4000000UL
@@ -40,6 +41,16 @@ UART_library.o: $(UART_LIB).c $(UART_LIB).h $(ENV_CONST)
 $(FILENAME).o: $(FILENAME).c # $(FILENAME).h
 	$(COMPILE) -c $(FILENAME).c -o $(FILENAME).o 
 
+$(FILENAME2).o: $(FILENAME2).c
+	$(COMPILE) -c $(FILENAME2).c -o $(FILENAME2).o 
+
+$(FILENAME3).o: $(FILENAME3).c
+	$(COMPILE) -c $(FILENAME3).c -o $(FILENAME3).o 
+
+compile_driver: $(FILENAME3).o timer_driver.o timer_library.o
+	$(COMPILE) -o $(FILENAME3).elf $(FILENAME3).o $(TIMER_DR).o $(TIMER_LIB).o
+	avr-objcopy -j .text -j .data -O ihex $(FILENAME3).elf $(FILENAME3).hex
+	avr-size --format=avr --mcu=$(DEVICE) $(FILENAME3).elf
 
 compile: $(FILENAME).o timer_library.o timer_driver.o
 	$(COMPILE) -o $(FILENAME).elf $(FILENAME).o $(TIMER_DR).o $(TIMER_LIB).o 
@@ -48,8 +59,7 @@ compile: $(FILENAME).o timer_library.o timer_driver.o
 
 # supporting a different sample file is so sus lmao
 
-$(FILENAME2).o: $(FILENAME2).c
-	$(COMPILE) -c $(FILENAME2).c -o $(FILENAME2).o 
+
 
 compile_uart: $(FILENAME2).o timer_library.o timer_driver.o UART_library.o UART_driver.o
 	$(COMPILE) -o $(FILENAME2).elf $(FILENAME2).o $(TIMER_DR).o $(TIMER_LIB).o $(UART_DR).o $(UART_LIB).o
