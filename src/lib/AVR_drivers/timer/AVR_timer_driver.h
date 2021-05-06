@@ -22,9 +22,9 @@
 typedef enum timer_output_mode {CTC_MODE, NORMAL_MODE, NO_TIMER} timer_output_mode; 
 
 
-
-//#define TEST_BIT 0
-//extern uint8_t test_flag; 
+// for testing
+volatile uint8_t test_flag; 
+#define TEST_BIT 0
 
 // universal timer state struct 
 typedef struct {

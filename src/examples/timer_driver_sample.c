@@ -4,7 +4,15 @@ Demonstrates and tests Timer Driver only
 */
 
 
+/*
+        stateless implementation
+        TO TEST NEXT 
+        - does ISR in driver code work with test_flag and TEST_BIT? 
+        - does ISR work with cusotm state 
+        - does init_timer() (library) work? 
+        - test check_bit_and_clear_if_set()
 
+        */
 
 /*----- Includes -----*/
 
@@ -23,25 +31,20 @@ mcu_type MCU = ATMEGA16M1;
 /*----- Global Variables -----*/
 // uint16_t freq_timer_1 = 30; 
 // uint16_t freq_timer_2 = 1000; 
-volatile uint8_t test_flag; 
-#define TEST_BIT 0
+
 /*----- Interrupt(s) -----*/
 /*----- Functions -----*/
 
 /*----- MAIN -----*/
 
 
-ISR(TIMER0_COMPA_vect){
-    // flip state bit 
-    test_flag |= _BV(TEST_BIT);
-    //PORTD ^= _BV(PD7); 
-}
+
 
 int main(void){
     /*----- INITS -----*/
-    // init_timer(0, CTC_MODE, freq_timer_1, 0); 
 
     // reset_timer(0); 
+    // init_timer(0, CTC_MODE, 17, 0); 
     init_timer_driver(0, CTC_MODE, 17, 0); 
     test_flag = 0x00; 
     //TCCR0A |= _BV(WGM01);    // Set up 8-bit timer in CTC mod
@@ -60,16 +63,7 @@ int main(void){
 
        // _delay_ms(500); 
 
-        /*
-        stateless implementation 
-        - does ISR work? 
-        - does init_timer_driver() work? 
-        - to try:  
-            shift down to timer raw
-            comment out ISR() and implement in this file
-            write everything in this file, transition slowly to driver tools
-
-        */
+        
         if (bit_is_set(test_flag, TEST_BIT)){
             PORTD ^= _BV(PD7); 
             test_flag &= ~_BV(TEST_BIT); 

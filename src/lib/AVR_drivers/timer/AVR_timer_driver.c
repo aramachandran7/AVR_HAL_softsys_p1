@@ -211,6 +211,13 @@ Interrupt handlers to flip global bits
 //     set_state_timer(UNIVERSAL_TIMER_STATE[0], current_state.timer_mode, new_flag); 
 // }
 
+// for testing
+ISR(TIMER0_COMPA_vect){
+    // flip state bit 
+    test_flag |= _BV(TEST_BIT);
+    //PORTD ^= _BV(PD7); 
+}
+
 ISR(TIMER0_COMPB_vect){
     // flip global bit
     timer_state_struct current_state = get_state_timer(UNIVERSAL_TIMER_STATE[0]); 
