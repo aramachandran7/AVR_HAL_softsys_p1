@@ -1,10 +1,11 @@
 FILENAME = ./examples/timer_sample
 FILENAME2 = ./examples/UART_sample
-
-DEVICE = m16
+DEVICE = atmega16m1
+DEVICE2 = m16
 CLOCK = 4000000UL
 BAUD = 115200
-PROGRAMMER = usbasp # might be 'dragon_isp' or `avrispmkII`
+PROGRAMMER = usbasp
+# might be 'dragon_isp' or `avrispmkII`
 PORT = usb
 
 COMPILE = avr-gcc -Wall -Werror -Os -g -std=gnu99 -DF_CPU=$(CLOCK) -mmcu=$(DEVICE) # -lm
