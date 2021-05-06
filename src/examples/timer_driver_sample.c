@@ -40,7 +40,12 @@ int main(void){
     // init_timer(0, CTC_MODE, freq_timer_1, 0); 
 
     // reset_timer(0); 
-    init_timer_driver(0, CTC_MODE, 17, 0); 
+    // init_timer_driver(0, CTC_MODE, 17, 0); 
+
+    TCCR0A = _BV(WGM01);    // Set up 8-bit timer in CTC mode
+	TCCR0B = 0x05;          // clkio/1024 prescaler
+	TIMSK0 |= _BV(OCIE0A); // interrupt? 
+	OCR0A = 0xE6;           //Makes timer run at ~17Hz
 
 
     DDRD |= _BV(DDD7); // toggle mode to output 
