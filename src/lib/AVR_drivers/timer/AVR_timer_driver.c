@@ -85,7 +85,7 @@ void set_state_timer(timer_state_struct * timer_state, timer_output_mode new_mod
 defualt init timer 0 with as many enums as possible
 */
 void init_timer_driver(short timer_num, timer_output_mode mode, uint16_t frequency_1, uint16_t frequency_2){
-    
+    test_flag = 0x00; 
     uint8_t prescaler_val; // helper var
     // vars to pass into raw function TODO: types? 
     uint8_t pass_mode = 0x00; 

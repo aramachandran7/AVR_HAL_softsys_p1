@@ -33,7 +33,7 @@ int main(void){
     // init_timer(0, CTC_MODE, freq_timer_1, 0); 
 
     // reset_timer(0); 
-    init_timer_driver(0, CTC_MODE, 17, 0)
+    init_timer_driver(0, CTC_MODE, 17, 0); 
 
 
     DDRD |= _BV(DDD7); // toggle mode to output 
