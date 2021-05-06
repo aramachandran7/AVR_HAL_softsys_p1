@@ -1,8 +1,6 @@
 #include "AVR_timer_driver.h"
 
 
-#define TEST_BIT 0
-uint8_t test_flag = 0x00; 
 
 /* 
 Page 85-93 of Atmega datasheet 
@@ -88,7 +86,7 @@ defualt init timer 0 with as many enums as possible
 */
 void init_timer_driver(short timer_num, timer_output_mode mode, uint16_t frequency_1, uint16_t frequency_2){
     
-    int16_t prescaler_val; // helper var
+    uint8_t prescaler_val; // helper var
     // vars to pass into raw function TODO: types? 
     uint8_t pass_mode = 0x00; 
     uint8_t prescaler; 
@@ -133,31 +131,31 @@ void init_timer_driver(short timer_num, timer_output_mode mode, uint16_t frequen
         break;
     }
 
-    if (frequency_1< (FCLK/1024)){ // these should be >> 3 right
-        prescaler_val = 1024; 
+    if (frequency_1< (FCLK>>10)){ 
+        prescaler_val = 10; 
         prescaler = 0x05;          // clkio/1024 prescaler
-    } else if (frequency_1 < FCLK/256){
-        prescaler_val = 256; 
-        prescaler = 0b100;          // clkio/256 prescaler
-    } else if (frequency_1<FCLK/64){
-        prescaler_val = 64; 
-        prescaler = 0b011;          // clkio/64 prescaler
-    } else if (frequency_1< FCLK/8){
+    } else if (frequency_1 < FCLK>>8){
         prescaler_val = 8; 
+        prescaler = 0b100;          // clkio/256 prescaler
+    } else if (frequency_1<FCLK>>6){
+        prescaler_val = 6; 
+        prescaler = 0b011;          // clkio/64 prescaler
+    } else if (frequency_1< FCLK>>3){
+        prescaler_val = 3; 
         prescaler = 0b001;          // clkio/8 prescaler
     } else {
         prescaler_val = 1; 
         prescaler = 0b000;          // no prescaler
     }
 
-    period_1 = (uint16_t)(FCLK/prescaler_val/frequency_1); 
+    period_1 = (uint16_t)(FCLK>>prescaler_val/frequency_1); // TODO: confirm ??? 
 
     if (frequency_2){
         if (timer_num== 1){
             interrupt_mask |= _BV(OCIE0B); 
         }
         interrupt_mask |= _BV(OCIE1B); 
-        period_2 = (uint16_t)(FCLK/prescaler_val/frequency_1);
+        period_2 = (uint16_t)(FCLK>>prescaler_val/frequency_1);
     }
 
     init_timer_raw(timer_num, pass_mode, prescaler, interrupt_mask, period_1, period_2); 
@@ -206,7 +204,7 @@ Interrupt handlers to flip global bits
 ISR(TIMER0_COMPA_vect){
     // flip state bit 
     test_flag |= _BV(TEST_BIT); 
-    
+
     timer_state_struct current_state = get_state_timer(UNIVERSAL_TIMER_STATE[0]); 
     uint8_t new_flag = current_state.timer_flag |= _BV(TIMER_FLAG_CMP_A); 
     set_state_timer(UNIVERSAL_TIMER_STATE[0], current_state.timer_mode, new_flag); 
