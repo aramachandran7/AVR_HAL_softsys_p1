@@ -41,7 +41,7 @@ int main(void){
 
 To compile & flash: 
 
-*This HAL hasn't been tested on actual hardware yet, use at your own risk `lmao`*
+*As of 5.7.21, the timer vertical has been tested with an Atmega16m1, but UART, ADC libraries are yet to be troubleshooted; use at your own risk.*
 ```
 $ cd src 
 $ make compile_uart
