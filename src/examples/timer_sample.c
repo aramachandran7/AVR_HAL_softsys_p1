@@ -37,36 +37,29 @@ uint8_t flash_counter = 0;
 int main(void){
     /*----- INITS -----*/
     init_timer(0, CTC_MODE, freq_timer_0, 0); 
+    init_timer(1, CTC_MODE, freq_timer_1, 0); 
 
 
     DDRD |= _BV(DDD7); // toggle mode to output 
     PORTD |= _BV(PD7); // set to logic HIGH
+
+    DDRB |= _BV(DDB0); 
+    PORTB |= _BV(PB0); 
     sei();
 
     while (1)
     {
         /* code */
         if (check_bit_and_clear_if_set(0, TIMER_FLAG_CMP_A)){
-
-            if (counter == 0){
-                // set timer 1
-                if (freq_timer_1==60){
-                    freq_timer_1 = 17; 
-                } else {
-                    freq_timer_1++; 
-                }
-		init_timer(1, CTC_MODE, freq_timer_1, 0); 
-            }
-            counter = (counter+1)%10;  
+            PORTB ^= _BV(PB0);  
         }
         if (check_bit_and_clear_if_set(1, TIMER_FLAG_CMP_A)){
             // flash LED
-            flash_counter = (flash_counter + 1) %5;  
-
+            flash_counter = (flash_counter + 1) %10;  
         }
-	if (flash_counter == 0) {
-	    PORTD ^= _BV(PD7); 
-	}
-    }
-    
+        if (flash_counter == 0) {
+            PORTD ^= _BV(PD7); 
+            // increment here 
+        }
+    }   
 }
